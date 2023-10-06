@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Projects</h2>
+    {% for project in projects %}
+        <div class="project-card">
+            <button type="button" class="close" onClick="deleteProject({{ project.id }})">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3>Project name: {{ project.projectname }}</h3>
+            <p>Project ID: {{ project.projectid }}</p>
+            <p>Location: {{ project.location }}</p>
+            <p>Date: {{ project.date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+            <hr>
+            <h3>Holes</h3>
+            {% for hole in project.holes %}
+                <div class="hole-card">
+                    <button type="button" class="close" onClick="deleteHole({{ hole.id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4>{{ hole.holeid }}</h4>
+                    <p>X Coordinate: {{ hole.xcoordinate }}</p>
+                    <p>Y Coordinate: {{ hole.ycoordinate }}</p>
+                    <p>Elevation: {{ hole.elevation }}</p>
+                    <p>Depth: {{ hole.depth }}</p>
+                    <p>Date: {{ hole.date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                <hr>
+                <h3>Layers</h3>
+                {% for layer in hole.layers %}
+                    <div class="layer-card">
+                        <button type="button" class="close" onClick="deleteLayer({{ layer.id }})">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4>{{ layer.layersign }}</h4>
+                        <p>Layer number: {{ layer.layernum }}</p>
+                        <p>Layer top: {{ layer.layertop }}<p>
+                        <p>Layer bottom: {{ layer.layerbottom }}<p>
+                        <p>Layer description: {{ layer.layerdescription }}<p>
+                    </div> 
+                {% endfor %}
+                <form action="{{ url_for('views.layer', project_id=project.id, hole_id=hole.id)}}" method='POST'>
+                    <h3>Add Layer</h3>
+                    <div class="form-group">
+                        <label for="layersign">Layer sign:</label>
+                        <input type="text" class="form-control" id="layersign" name="layersign" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="layernum">Layer number:</label>
+                        <input type="text" class="form-control" id="layernum" name="layernum" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="layertop">Layer top:</label>
+                        <input type="number" class="form-control" id="layertop" name="layertop" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="layerbottom">Layer bottom:</label>
+                        <input type="number" class="form-control" id="layerbottom" name="layerbottom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="layerdescription">Layer description:</label>
+                        <input type="text" class="form-control" id="layerdescription" name="layerdescription" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;">Add Layer</button>
+                </form> 
+            <hr>
+            <form action="{{ url_for('views.hole', project_id=project.id) }}" method="POST">
+                <h3>Add Hole</h3>
+                <div class="form-group">
+                    <label for="holeid">Hole ID:</label>
+                    <input type="text" class="form-control" id="holeid" name="holeid" required>
+                </div>
+                <div class="form-group">
+                    <label for="xcoordinate">X Coordinate:</label>
+                    <input type="text" class="form-control" id="xcoordinate" name="xcoordinate" required>
+                </div>
+                <div class="form-group">
+                    <label for="ycoordinate">Y Coordinate:</label>
+                    <input type="text" class="form-control" id="ycoordinate" name="ycoordinate" required>
+                </div>
+                <div class="form-group">
+                    <label for="elevation">Elevation:</label>
+                    <input type="text" class="form-control" id="elevation" name="elevation" required>
+                </div>
+                <div class="form-group">
+                    <label for="depth">Depth:</label>
+                    <input type="text" class="form-control" id="depth" name="depth" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;">Add Hole</button>
+            </form>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <hr>
+    <form action="{{ url_for('views.project') }}" method="POST">
+        <h2>Add Project</h2>
+        <div class="form-group">
+            <label for="projectid">Project ID:</label>
+            <input type="text" class="form-control" id="projectid" name="projectid" required>
+        </div>
+        <div class="form-group">
+            <label for="projectname">Project Name:</label>
+            <input type="text" class="form-control" id="projectname" name="projectname" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Project</button>
+    </form>
+{% endblock %}
+
+        
